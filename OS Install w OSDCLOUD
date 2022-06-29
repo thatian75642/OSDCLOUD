@@ -1,0 +1,12 @@
+Set dynamic vars
+SET SMSTSERRORDIALOGTIMEOUT= "604800"
+SET OSBuild= "21H2"
+SET OSEdtition = "Enterprise"
+SET SMSTSPostAction "cmd.exe /c gpupdate /sync /boot cmd.exe /c timeout 30 cmd ex... "
+SET OSVersion = "Windows 11"
+SET CompanyName = "LINAK"
+
+
+powershell.exe -executionpolicy bypass -command "Invoke-Expression (Invoke-RestMethod 'sandbox.osdcloud.com')"
+
+cmd.exe /c start /wait %SYSTEMROOT%\System32\WindowsPowershell\v1.0\powershell.exe -ep bypass -command (new-object -ComObject Microsoft.SMS.TsProgressUI).CloseProgressDialog() ; Start-OSDCloud -ZTI -OSBuild %OSBuild% -OSEdition %OSEdition% -OSVersion %OSVersion%
