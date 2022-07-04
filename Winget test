@@ -97,33 +97,30 @@ function Write-Log ($LogMsg, $LogColor = "White") {
 }
 
 #Get WinGet Location Function
+
 function Get-WingetCmd {
+$Script:winget = "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\winget.exe"   
+}
+    <#
     #Get WinGet Path (if admin context)
-    $ResolveWingetPath = Resolve-Path "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe"
-    if ($ResolveWingetPath) {
-        #If multiple version, pick last one
-        $WingetPath = $ResolveWingetPath[-1].Path
-    }
+    $Script:Winget = Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe
+
     #Get WinGet Location in User context
     $WingetCmd = Get-Command winget.exe -ErrorAction SilentlyContinue
     if ($WingetCmd) {
         $Script:Winget = $WingetCmd.Source
     }
     #Get Winget Location in System context (WinGet < 1.17)
-    elseif (Test-Path "$WingetPath\AppInstallerCLI.exe") {
-        $Script:Winget = "$WingetPath\AppInstallerCLI.exe"
+    elseif (Test-Path "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\AppInstallerCLI.exe") {
+        $Script:Winget = "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\AppInstallerCLI.exe"
     }
     #Get Winget Location in System context (WinGet > 1.17)
-    elseif (Test-Path "$WingetPath\winget.exe") {
-        $Script:Winget = "$WingetPath\winget.exe"
-    }
-    else {
-        Write-Log "Winget not installed !" "Red"
-        break
+    elseif (Test-Path "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\winget.exe") {
+        Winget = "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\winget.exe"
     }
     Write-Log "Using following Winget Cmd: $winget`n"
-}
-
+#}
+#>
 #Function to configure prefered scope option as Machine
 function Add-ScopeMachine {
     #Get Settings path for system or current user
@@ -162,7 +159,7 @@ function Add-ScopeMachine {
 #Check if app is installed
 function Confirm-Install ($AppID) {
     #Get "Winget List AppID"
-    $InstalledApp = & $winget list --Id $AppID --accept-source-agreements | Out-String
+    $InstalledApp = & "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\winget.exe" list --Id $AppID --accept-source-agreements | Out-String
 
     #Return if AppID exists in the list
     if ($InstalledApp -match [regex]::Escape($AppID)) {
@@ -172,11 +169,10 @@ function Confirm-Install ($AppID) {
         return $false
     }
 }
-
 #Check if App exists in Winget Repository
 function Confirm-Exist ($AppID) {
     #Check is app exists in the winget repository
-    $WingetApp = & $winget show --Id $AppID --accept-source-agreements | Out-String
+    $WingetApp = & "$PSScriptRoot\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\Microsoft.DesktopAppInstaller_1.17.11601.0_x64__8wekyb3d8bbwe\winget.exe" show --Id $AppID --accept-source-agreements | Out-String
 
     #Return if AppID exists
     if ($WingetApp -match [regex]::Escape($AppID)) {
@@ -188,7 +184,7 @@ function Confirm-Exist ($AppID) {
         return $false
     }
 }
-
+>#
 #Check if modifications exist in "mods" directory
 function Test-ModsInstall ($AppID) {
     if (Test-Path "$PSScriptRoot\mods\$AppID-install-once.ps1") {
@@ -395,3 +391,5 @@ foreach ($App_Full in $AppIDs) {
 
 Write-Log "###   END REQUEST   ###`n" "Magenta"
 Start-Sleep 3
+
+#C:\Users\ltkn_Adm\AppData\Local\Microsoft\WindowsApps\winget.exe
