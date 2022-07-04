@@ -391,5 +391,3 @@ foreach ($App_Full in $AppIDs) {
 
 Write-Log "###   END REQUEST   ###`n" "Magenta"
 Start-Sleep 3
-
-#C:\Users\ltkn_Adm\AppData\Local\Microsoft\WindowsApps\winget.exe
