@@ -1,1 +1,0 @@
-Remove-AppxPackage -Package Microsoft.DesktopAppInstaller_1.17.10271.0_x64__8wekyb3d8bbwe
